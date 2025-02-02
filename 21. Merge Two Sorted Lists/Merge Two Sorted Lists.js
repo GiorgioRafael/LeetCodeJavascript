@@ -19,13 +19,71 @@ Output: [0]
 
 */
 
-let list1 = [1,2,4]
-let list2 = [1,3,4]
-var mergeTwoLists = function(list1, list2) {
-    let mergedArrays = list1.concat(list2);
-    mergedArrays.sort((a, b) => a - b);   
-    return mergedArrays
+//preciso de um construtor???
+class ListNode {
+    constructor(val = 0, next = null){
+        this.val = val;
+        this.next = next;
+    }
+}
 
-    //fiz uma funcao que junta duas listas e da sort nelas, mas nao funciona para listas, preciso estudar mais o conceito de lista e como poderia fazer isso;
-    // talvez se eu rodasse a lista inteira adcionando ela a outra variavel
+function adicionarNode(head, val) {
+    let newNode = new ListNode(val) //precisa ser adicionado através de uma variavel
+    if (!head) return newNode; //se o node estiver vazio (nao retornar head, ele cria um novo node, que vira a cabeça)
+
+    let current = head;
+    while (current.next){
+        current = current.next
+    }
+    current.next = newNode;
+    return head;
+}
+
+
+// percorrer a lista até achar um valor menor que o valor atual(da nova lista){
+// adcionar o valor da lista, a nova lista }
+var mergeTwoLists = function(list1, list2) {
+
+    let listaSorted = new ListNode()
+
+    function encontrarMenor(head){
+        if(!head) return null;
+    
+        let menorValor = head.val;
+        let current = head.next
+    
+        while(current){
+            if(current.val < menorValor){
+                menorValor = current.val;
+            }
+            current = current.next
+        }
+        return menorValor
+    }
+    let menorValor1 = encontrarMenor(list1);
+    let menorValor2 = encontrarMenor(list2);
+    if(menorValor1 < menorValor2){
+        let listaSorted = new ListNode(menorValor1)
+    } else {
+        let listaSorted = new ListNode(menorValor2)
+    }
+
+    function adcionarProximo(head){
+        let valorAtual = head.val;
+        let current = head.next;
+
+        while(current){
+            if(valorAtual < current.val){
+                current = current.next
+            } else if(valorAtual == current.val){
+                adicionarNode(head, current.val)
+            } else if(valorAtual > current.val){
+                valorAtual = current.val
+            }
+        }
+    }
+    //verificacao das listas procurando proximo numero seguinte
+    
+
+
 }
