@@ -19,7 +19,7 @@ Output: [0]
 
 */
 
-//preciso de um construtor???
+
 class ListNode {
     constructor(val = 0, next = null){
         this.val = val;
@@ -27,63 +27,50 @@ class ListNode {
     }
 }
 
-function adicionarNode(head, val) {
-    let newNode = new ListNode(val) //precisa ser adicionado através de uma variavel
-    if (!head) return newNode; //se o node estiver vazio (nao retornar head, ele cria um novo node, que vira a cabeça)
+let list1 = new ListNode(1, new ListNode(2, new ListNode(4))); 
+let list2 = new ListNode(1, new ListNode(3, new ListNode(4))); 
 
-    let current = head;
-    while (current.next){
-        current = current.next
+var mergeTwoLists = function(list1, list2){
+    let arrayFinal = []
+    function LinkedListToArray(head){
+        let array = [];
+        let current = head;
+    
+        while(current){
+            array.push(current.val);
+            current = current.next; //passa para o proximo node
+        }
+        return array;
     }
-    current.next = newNode;
+    let array1 = LinkedListToArray(list1)
+    let array2 = LinkedListToArray(list2)
+
+    arrayFinal = array1.concat(array2)
+    let arrayFinalOrganizado = arrayFinal.sort((a, b) => a - b);
+    console.log(arrayFinalOrganizado);
+    //temos a variavel arrayFinalOrganizado com todos os numeros em ordem
+
+    //preciso criar uma linked list com esses valores
+
+    // Função para converter um array em uma linked list
+
+function arrayToLinkedList(array) {
+    if (array.length === 0) return null; // Se o array estiver vazio, retorna null
+
+    let head = new ListNode(array[0]); // Cria o primeiro nó com o primeiro valor do array
+    let current = head;
+
+    for (let i = 1; i < array.length; i++) {
+        current.next = new ListNode(array[i]); // Cria um novo nó e conecta ao anterior
+        current = current.next;
+    }
+
     return head;
 }
-
-
-// percorrer a lista até achar um valor menor que o valor atual(da nova lista){
-// adcionar o valor da lista, a nova lista }
-var mergeTwoLists = function(list1, list2) {
-
-    let listaSorted = new ListNode()
-
-    function encontrarMenor(head){
-        if(!head) return null;
-    
-        let menorValor = head.val;
-        let current = head.next
-    
-        while(current){
-            if(current.val < menorValor){
-                menorValor = current.val;
-            }
-            current = current.next
-        }
-        return menorValor
-    }
-    let menorValor1 = encontrarMenor(list1);
-    let menorValor2 = encontrarMenor(list2);
-    if(menorValor1 < menorValor2){
-        let listaSorted = new ListNode(menorValor1)
-    } else {
-        let listaSorted = new ListNode(menorValor2)
-    }
-
-    function adcionarProximo(head){
-        let valorAtual = head.val;
-        let current = head.next;
-
-        while(current){
-            if(valorAtual < current.val){
-                current = current.next
-            } else if(valorAtual == current.val){
-                adicionarNode(head, current.val)
-            } else if(valorAtual > current.val){
-                valorAtual = current.val
-            }
-        }
-    }
-    //verificacao das listas procurando proximo numero seguinte
-    
-
+return arrayToLinkedList(arrayFinalOrganizado)
 
 }
+
+mergeTwoLists(list1,list2)
+
+
