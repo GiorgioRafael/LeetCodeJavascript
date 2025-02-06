@@ -1,6 +1,7 @@
 //with this result i got "Time Limit Exceeded"
 //im guessing this works. but since its taking too long, im remaking it.
 // have no idea on how to optimize this, ask AI and try to understand.
+nums[0,1,5,7,10,12,222,22,10,25]
 function tupleSameProduct(nums){
     function getCombinations(arr, size) {
      const result = [];
@@ -16,12 +17,13 @@ function tupleSameProduct(nums){
      combine(0, []);
      return result;
  }
+ 
  function getPermutations(arr) {
-     if (arr.length === 0) return [[]]; 
+     if (arr.length === 0) return [[]];
      let result = []; 
      for (let i = 0; i < arr.length; i++) { 
-         let rest = arr.slice(0, i).concat(arr.slice(i + 1));
-         let perms = getPermutations(rest); 
+         let rest = arr.slice(0, i).concat(arr.slice(i + 1)); //arr.slice todos os numeros antes do numero atual
+         let perms = getPermutations(rest);
          
          for (let perm of perms) { 
              result.push([arr[i], ...perm]);
@@ -38,6 +40,7 @@ function tupleSameProduct(nums){
          let perms = getPermutations(combination);
          allPermutations.push(...perms);
      }
+
      
      return allPermutations;
  }

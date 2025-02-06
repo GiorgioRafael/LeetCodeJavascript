@@ -27,63 +27,46 @@ Explanation: There are 16 valid tuples:
 // if(nums[0]*nums[1] = nums[2]* nums[3]){return true}
 //gerar combinações de 4 numeros
 */
-nums = [2,3,4,6]
-    
-function tupleSameProduct(nums){
-   //funcao de separar todas as combinacoes possiveis de x(4) numeros
-   function getCombinations(arr, size) {
-    const result = [];
-    function combine(start, comb) {
-        if (comb.length === size) {
-            result.push(comb);
-            return;
+//RESOLUCAO============================================================================================================================
+
+//apos tirar duvidas com o chatgpt
+// cheguei na conclusao que seria mais facil outra abordagem, de verificacao de duplas
+// para verificar duplas, preciso armazenar elas em um mapa hash
+
+
+//fazer a verificacao se os numeros a,b e c,d são iguais é mais simples, porem deixa o codigo mais lento, a solução
+// ideal é verificar antes se um numero aparece de um lado, nao pode aparecer do outro, que deixa o codigo mais rapido 
+
+function tupleSameProduct(nums) {
+    let productMap = new Map(); // Mapa para armazenar os produtos
+    let contador = 0;
+    // Percorrer todos os pares (i, j) e calcular o produto
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+            let product = nums[i] * nums[j];  // Calcula o produto
+
+            // Se o produto já existe no mapa, precisamos verificar se os números são distintos
+            if (productMap.has(product)) {
+                // Pegar as combinações anteriores que deram esse produto
+                let combinations = productMap.get(product);
+
+                // Verificar se os números (i, j) não se repetem com combinações anteriores
+                for (let [a, b] of combinations) {
+                    if (a !== i && a !== j && b !== i && b !== j) {
+                        contador += 8;  // Se são combinações válidas, incrementar o contador
+                        //por que 8? pois cada combinaçao valida tem 8 mudanças de possiveis.
+                    }
+                }
+            }
+
+            // Armazena a combinação de números com o produto no mapa
+            if (productMap.has(product)) {
+                productMap.get(product).push([i, j]);
+            } else {
+                productMap.set(product, [[i, j]]);
+            }
         }
-        for (let i = start; i < arr.length; i++) {
-            combine(i + 1, [...comb, arr[i]]);
-        }
     }
-    combine(0, []);
-    return result;
+
+    return contador;  // Retorna o número de combinações válidas
 }
-function getPermutations(arr) { //funcao para conseguir as permutacoes do array
-    if (arr.length === 0) return [[]]; //se for vazio retorna nada
-    let result = []; //variavel para armazenar o resultado
-    for (let i = 0; i < arr.length; i++) { //loop do tamanho do array
-        let rest = arr.slice(0, i).concat(arr.slice(i + 1)); //pega todos os valores menos o atual e joga no array rest
-        let perms = getPermutations(rest); // chama recursivamente a funcao, gerando as permutacoes ate chamar []
-        //ex: arr[1,2,3] i=0, chamara [2,3] [3] [] em sequencia.
-        for (let perm of perms) { //percorre cada elemento do perms e atribui a perm em cada iteração
-            result.push([arr[i], ...perm]); //cada iteracao adiciona o valor atual (arr[i]) no inicio da iteracao atual(o valor que estava faltando)
-        }
-    }
-    return result;
-}
-
-function getAll4Permutations(arr) {
-    let combinations = getCombinations(arr, 4);  // Gera todas as combinações de 4 números
-    let allPermutations = [];
-    
-    for (let combination of combinations) {
-        let perms = getPermutations(combination); // Gera permutações para cada combinação
-        allPermutations.push(...perms);  // Adiciona as permutações ao resultado final
-    }
-    
-    return allPermutations;
-}
-let allPermutations = getAll4Permutations(nums)
-let contador = 0;
-//fazer verificacao
-for(let subArray of allPermutations){
-    if(subArray[0] *subArray[1] === subArray[2] *subArray[3]){
-        contador++
-    }
-}
-return contador;
-}
-
-
-//funcao final que utiliza as duas funcoes anteriores para fazer permutacao de 4 numeros
-
-
-
-//verificar se a*b === c*d
